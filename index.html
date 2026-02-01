@@ -2,93 +2,60 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>HOZZA MENU</title>
+<title>Menu NUI Pro</title>
 <style>
-body {
-    margin:0; padding:0;
-    font-family: sans-serif;
-    background: rgba(0,0,0,0.5);
-    color:white;
-}
+body { margin:0; padding:0; font-family:sans-serif; background:transparent; }
+/* Container principal */
 .menu {
-    position:absolute;
-    top: 20%; left: 50%;
-    transform: translate(-50%, -20%);
-    width: 300px;
-    background: rgba(10,10,10,0.95);
-    border: 2px solid #00d4ff;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 0 15px #00d4ff;
+    position:absolute; top:15%; left:50%; transform:translate(-50%,0);
+    width:350px; background:rgba(15,15,15,0.95); border:2px solid #00d4ff;
+    border-radius:12px; padding:10px; box-shadow:0 0 20px #00d4ff; 
+    transition:all 0.3s ease;
 }
-.menu .title {
-    font-size: 20px;
-    font-weight: bold;
-    background:#00d4ff;
-    color:black;
-    text-align:center;
-    padding:5px;
-    border-radius:5px;
+.title {
+    background:#00d4ff; color:black; font-size:20px; font-weight:bold;
+    text-align:center; padding:8px; border-radius:8px; margin-bottom:10px;
 }
-.menu button {
-    width:100%;
-    padding:10px;
-    margin:5px 0;
-    border:none;
-    border-radius:5px;
-    background:#222;
-    color:white;
-    cursor:pointer;
-    transition: all 0.2s;
+.tabs { display:flex; justify-content:space-around; margin-bottom:10px; }
+.tab { cursor:pointer; padding:5px 10px; border-radius:6px; background:#111; transition:0.2s; }
+.tab.active { background:#00d4ff; color:black; }
+.section { display:none; }
+.section.active { display:block; }
+button {
+    width:100%; padding:12px; margin:5px 0; border:none; border-radius:6px;
+    background:#222; color:white; cursor:pointer; transition:0.2s; text-align:left;
 }
-.menu button:hover {
-    background:#00d4ff;
-    color:black;
-}
-.tabs {
-    display:flex;
-    justify-content:space-around;
-    margin:10px 0;
-}
-.tab {
-    cursor:pointer;
-    padding:5px 10px;
-    border-radius:5px;
-    background:#111;
-    transition:0.2s;
-}
-.tab.active {
-    background:#00d4ff;
-    color:black;
-}
-.section {
-    display:none;
-    margin-top:10px;
-}
-.section.active {
-    display:block;
-}
+button:hover { background:#00d4ff; color:black; }
+button.red { background:red; color:white; }
+button.red:hover { background:#ff5555; color:black; }
 </style>
 </head>
 <body>
+
 <div class="menu">
     <div class="title">HOZZA MENU</div>
+
     <div class="tabs">
         <div class="tab active" data-tab="player">Joueur</div>
         <div class="tab" data-tab="vehicle">Véhicule</div>
     </div>
+
     <div class="section active" id="player">
         <button onclick="exec('heal')">🏥 Santé Max</button>
         <button onclick="exec('armor')">🛡️ Armure Max</button>
     </div>
+
     <div class="section" id="vehicle">
         <button onclick="exec('repair')">🔧 Réparer Véhicule</button>
         <button onclick="exec('flip')">↩️ Retourner Véhicule</button>
+        <button onclick="exec('boost')">💨 Boost Véhicule</button>
     </div>
-    <button onclick="exec('close')" style="background:red;">❌ Fermer</button>
+
+    <button class="red" onclick="exec('close')">❌ Fermer</button>
 </div>
 
 <script>
+// Gestion des onglets
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -99,12 +66,14 @@ tabs.forEach(tab => {
     });
 });
 
+// Fonction pour envoyer les actions à FiveM
 function exec(action){
-    fetch(`https://baseevents/action`,{
+    fetch(`https://baseevents/action`, {
         method:'POST',
-        body: JSON.stringify({act:action})
+        body: JSON.stringify({act: action})
     });
 }
 </script>
+
 </body>
 </html>
