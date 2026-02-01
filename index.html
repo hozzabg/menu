@@ -1,45 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <style>
-        body { margin: 0; padding: 0; font-family: sans-serif; display: none; }
+        body {
+            margin: 0; padding: 0;
+            background: transparent; /* Fond transparent pour voir le jeu */
+            font-family: sans-serif;
+        }
         .menu {
             position: absolute; top: 10%; left: 2%;
-            width: 250px; background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00c6ff; border-radius: 10px; color: white;
-            padding: 15px; box-shadow: 0 0 20px #00c6ff;
+            width: 260px; background: rgba(10, 10, 10, 0.95);
+            border: 2px solid #00d4ff; border-radius: 8px;
+            color: white; box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
         }
+        .title {
+            background: #00d4ff; color: black; padding: 10px;
+            text-align: center; font-weight: bold; font-size: 18px;
+        }
+        .btns { padding: 10px; }
         button {
-            width: 100%; padding: 10px; margin: 5px 0;
-            background: #222; color: #00c6ff; border: 1px solid #00c6ff;
-            cursor: pointer; font-weight: bold;
+            width: 100%; padding: 12px; margin: 5px 0;
+            background: #222; color: white; border: 1px solid #333;
+            border-radius: 4px; cursor: pointer; text-align: left;
         }
-        button:hover { background: #00c6ff; color: black; }
+        button:hover { background: #00d4ff; color: black; }
     </style>
 </head>
 <body>
     <div class="menu">
-        <h2 style="text-align:center">MOD MENU</h2>
-        <button onclick="exec('heal')">SANTÉ</button>
-        <button onclick="exec('repair')">RÉPARER</button>
-        <button onclick="window.closeMenu()">FERMER</button>
+        <div class="title">HOZZA MENU</div>
+        <div class="btns">
+            <button onclick="exec('heal')">🏥 SANTÉ MAX</button>
+            <button onclick="exec('armor')">🛡️ ARMURE MAX</button>
+            <button onclick="exec('repair')">🔧 RÉPARER VÉHICULE</button>
+            <button onclick="window.closeMenu()" style="color:red; border-color:red;">❌ FERMER</button>
+        </div>
     </div>
 
     <script>
-        window.addEventListener('message', function(event) {
-            if (event.data.type === "show") { document.body.style.display = "block"; }
-        });
-
         function exec(action) {
-            // On renvoie l'action au Lua du jeu
-            fetch(`https://baseevents/action`, { 
-                method: 'POST', 
-                body: JSON.stringify({ act: action }) 
+            fetch(`https://baseevents/action`, {
+                method: 'POST',
+                body: JSON.stringify({ act: action })
             });
         }
-
         window.closeMenu = function() {
-            document.body.style.display = "none";
             fetch(`https://baseevents/close`, { method: 'POST' });
         }
     </script>
