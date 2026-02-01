@@ -1,53 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            margin: 0; padding: 0;
-            background: transparent; /* Fond transparent pour voir le jeu */
-            font-family: sans-serif;
-        }
-        .menu {
-            position: absolute; top: 10%; left: 2%;
-            width: 260px; background: rgba(10, 10, 10, 0.95);
-            border: 2px solid #00d4ff; border-radius: 8px;
-            color: white; box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-        }
-        .title {
-            background: #00d4ff; color: black; padding: 10px;
-            text-align: center; font-weight: bold; font-size: 18px;
-        }
-        .btns { padding: 10px; }
-        button {
-            width: 100%; padding: 12px; margin: 5px 0;
-            background: #222; color: white; border: 1px solid #333;
-            border-radius: 4px; cursor: pointer; text-align: left;
-        }
-        button:hover { background: #00d4ff; color: black; }
-    </style>
+<meta charset="UTF-8">
+<title>HOZZA MENU</title>
+<style>
+body {
+    margin:0; padding:0;
+    font-family: sans-serif;
+    background: rgba(0,0,0,0.5);
+    color:white;
+}
+.menu {
+    position:absolute;
+    top: 20%; left: 50%;
+    transform: translate(-50%, -20%);
+    width: 300px;
+    background: rgba(10,10,10,0.95);
+    border: 2px solid #00d4ff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 15px #00d4ff;
+}
+.menu .title {
+    font-size: 20px;
+    font-weight: bold;
+    background:#00d4ff;
+    color:black;
+    text-align:center;
+    padding:5px;
+    border-radius:5px;
+}
+.menu button {
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border:none;
+    border-radius:5px;
+    background:#222;
+    color:white;
+    cursor:pointer;
+    transition: all 0.2s;
+}
+.menu button:hover {
+    background:#00d4ff;
+    color:black;
+}
+.tabs {
+    display:flex;
+    justify-content:space-around;
+    margin:10px 0;
+}
+.tab {
+    cursor:pointer;
+    padding:5px 10px;
+    border-radius:5px;
+    background:#111;
+    transition:0.2s;
+}
+.tab.active {
+    background:#00d4ff;
+    color:black;
+}
+.section {
+    display:none;
+    margin-top:10px;
+}
+.section.active {
+    display:block;
+}
+</style>
 </head>
 <body>
-    <div class="menu">
-        <div class="title">HOZZA MENU</div>
-        <div class="btns">
-            <button onclick="exec('heal')">🏥 SANTÉ MAX</button>
-            <button onclick="exec('armor')">🛡️ ARMURE MAX</button>
-            <button onclick="exec('repair')">🔧 RÉPARER VÉHICULE</button>
-            <button onclick="window.closeMenu()" style="color:red; border-color:red;">❌ FERMER</button>
-        </div>
+<div class="menu">
+    <div class="title">HOZZA MENU</div>
+    <div class="tabs">
+        <div class="tab active" data-tab="player">Joueur</div>
+        <div class="tab" data-tab="vehicle">Véhicule</div>
     </div>
+    <div class="section active" id="player">
+        <button onclick="exec('heal')">🏥 Santé Max</button>
+        <button onclick="exec('armor')">🛡️ Armure Max</button>
+    </div>
+    <div class="section" id="vehicle">
+        <button onclick="exec('repair')">🔧 Réparer Véhicule</button>
+        <button onclick="exec('flip')">↩️ Retourner Véhicule</button>
+    </div>
+    <button onclick="exec('close')" style="background:red;">❌ Fermer</button>
+</div>
 
-    <script>
-        function exec(action) {
-            fetch(`https://baseevents/action`, {
-                method: 'POST',
-                body: JSON.stringify({ act: action })
-            });
-        }
-        window.closeMenu = function() {
-            fetch(`https://baseevents/close`, { method: 'POST' });
-        }
-    </script>
+<script>
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelector('.tab.active').classList.remove('active');
+        tab.classList.add('active');
+        document.querySelector('.section.active').classList.remove('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+
+function exec(action){
+    fetch(`https://baseevents/action`,{
+        method:'POST',
+        body: JSON.stringify({act:action})
+    });
+}
+</script>
 </body>
 </html>
